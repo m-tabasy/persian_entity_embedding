@@ -1,11 +1,17 @@
-from basic.words import *
-from basic.entities import *
+import os
+import time
 
-config = configparser.ConfigParser()
-file_path = os.path.dirname(__file__)
-config_path = os.path.join(file_path, '../config.ini')
-config.read(config_path)
+from gensim.corpora import wikicorpus
+from hazm import word_tokenize
 
+from basic.words import word2id, get_stop_words
+from basic.entities import extract_doc_tag
+
+from basic import commons
+
+config = commons.get_config()
+
+force_generate = config.getboolean('param', 'regenerate')
 fa_wiki_path = config['path']['wiki']
 canonical_words_path = config['path']['canonical']
 
@@ -33,7 +39,7 @@ def gen_canonical_words(wiki_path, output_path, replace_word_by_id=True):
 						if doc_count == ent_max:
 							break
 
-					output_line = f'{wiki_id}\t{ent_name}\tCANONICAL_WORDS'
+					output_line = f'{wiki_id}\t{ent_name}\tCNC_WORDS'
 
 				else:
 					clean_text = wikicorpus.filter_wiki(line)
@@ -41,7 +47,7 @@ def gen_canonical_words(wiki_path, output_path, replace_word_by_id=True):
 
 					# removing stop words from positive words
 					stop_words = get_stop_words()
-					valid_words = list(filter(lambda w: w in word2id.keys(), words))
+					valid_words = list(filter(lambda w: w in word2id, words))
 					pure_words = list(filter(lambda w: w not in stop_words, valid_words))
 					pure_ids = list(map(lambda w: str(word2id[w]), pure_words))
 
@@ -53,4 +59,11 @@ def gen_canonical_words(wiki_path, output_path, replace_word_by_id=True):
 
 
 if __name__ == '__main__':
-	gen_canonical_words(fa_wiki_path, canonical_words_path)
+	
+	# generate data and calculate time
+	_start = time.time()
+	if force_generate or not os.path.exists(canonical_words_path):
+		gen_canonical_words(fa_wiki_path, canonical_words_path)
+	_end = time.time()
+	print(f'-- calculated time is {_end - _start} sec')
+
