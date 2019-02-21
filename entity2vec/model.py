@@ -1,4 +1,3 @@
-import torch
 from torch import nn
 import numpy as np
 
@@ -50,3 +49,6 @@ class Model(nn.Module):
 		output = cosines.view(-1, self.neg_words)
 
 		return output
+	
+	def get_entity_vector(self, ent_id):
+		return self.embedding(ent_id)

@@ -1,12 +1,9 @@
 import torch
 
-from basic.entities import *
 from entity2vec import minibatch
+from basic import commons
 
-config = configparser.ConfigParser()
-file_path = os.path.dirname(__file__)
-config_path = os.path.join(file_path, '../config.ini')
-config.read(config_path)
+config = commons.get_config()
 
 model_path = config['path']['model']
 
@@ -49,7 +46,7 @@ def train_entity_vectors(network, loss_func, optimizer, epochs=1):
 
 		epochs_passed += 1
 
-		print(f'-- loss: {epoch_loss}')
+		print(f'-- loss: {epoch_loss}\n')
 
 		if epochs_passed % 2 == 0:
 			print(f'-- saving model!')
