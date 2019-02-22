@@ -20,12 +20,12 @@ def get_word_vectors():
 
 class Model(nn.Module):
 
-	def __init__(self, ent_count, vec_size, words_per_ent, neg_words):
+	def __init__(self, used_device, ent_count, vec_size, words_per_ent, neg_words):
 		super(Model, self).__init__()
 
 		self.embedding = nn.Embedding(ent_count, vec_size)
 
-		pretrained_word_vectors = torch.from_numpy(get_word_vectors())
+		pretrained_word_vectors = torch.from_numpy(get_word_vectors(), device=used_device)
 		self.word2vec = nn.Embedding.from_pretrained(embeddings=pretrained_word_vectors, freeze=True)
 
 		self.ent_count = ent_count

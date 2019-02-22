@@ -3,10 +3,13 @@ hazm==0.7.0
 ipykernel==5.1.0
 ipython==7.2.0
 ipython-genutils==0.2.0
-jupyter-client==5.2.4
+ipywidgets==7.4.1
+jupyter==1.0.0
+jupyter-client==5.2.3
+jupyter-console==5.2.0
 jupyter-core==4.4.0
-jupyterlab==0.35.3
-jupyterlab-server==0.2.0
+jupyterlab==0.34.9
+jupyterlab-launcher==0.13.1
 nltk==3.3
 notebook==5.7.4
 numpy==1.15.4

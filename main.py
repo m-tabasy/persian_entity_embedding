@@ -7,11 +7,9 @@ from torch import nn
 
 from entity2vec.model import Model
 from entity2vec import train
+from basic.commons import get_config, get_device, cuda_available
 
-config = configparser.ConfigParser()
-file_path = os.path.dirname(__file__)
-config_path = os.path.join(file_path, 'config.ini')
-config.read(config_path)
+config = get_config()
 
 # model params
 ent_count = int(config['limit']['entity'])
@@ -25,15 +23,21 @@ margin = float(config['param']['margin'])
 
 # defining model
 
-device = torch.device('cuda:0')
+device = get_device()
 
-network = Model(ent_count, vec_size, words_per_ent, neg_words)    # .cuda() do the same for inputs & targets...
+network = Model(ent_count, vec_size, words_per_ent, neg_words).to(device)
 
-loss_func = nn.MultiMarginLoss(p=1, margin=margin)
+loss_func = nn.MultiMarginLoss(p=1, margin=margin).to(device)
 
 # SparseAdam, SGD work in cpu, gpu
 # while AdaGrad only works on cpu (because of the embedding layer)
-optimizer = opt.Adagrad(network.parameters(), lr=learning_rate)
+if cuda_available():
+	print('-- cuda is available! so using adam optimizer.')
+	optimizer = opt.Adam(network.parameters(), lr=learning_rate)
+else:
+	print('-- cuda is not available! so using adagrad optimizer.')
+	optimizer = opt.AdaGrad(network.parameters(), lr=learning_rate)
+
 
 if __name__ == '__main__':
 	train.train_entity_vectors(network, loss_func, optimizer)

@@ -14,9 +14,15 @@ def get_config():
 	return config
 
 
+def cuda_available():
+	return torch.cuda.is_available()
+
+
 def get_device():
 	
-	if torch.cuda.is_available() and False:  # TODO: fix this
+	use_gpu = get_config()['param']['gpu']
+	
+	if use_gpu and torch.cuda.is_available():
 		return torch.device('cuda:0')
 	else:
 		return torch.device('cpu')

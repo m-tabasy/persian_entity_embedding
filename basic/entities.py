@@ -3,7 +3,6 @@ import re
 import pickle
 import time
 
-from numba import jit
 from basic import commons
 
 config = commons.get_config()

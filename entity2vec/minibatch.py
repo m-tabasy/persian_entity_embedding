@@ -15,7 +15,6 @@ device = commons.get_device()
 canonical_words_path = config['path']['canonical']
 hyp_ctx_words_path = config['path']['hyp_ctx']
 
-thread_count = int(config['param']['thread'])
 batch_size = int(config['param']['batch_size'])
 passes_wiki_words = int(config['param']['passes_wiki_words'])
 words_per_ent = int(config['param']['words_per_ent'])
@@ -92,7 +91,7 @@ def process_one_line(line, minibatch, minitargets, batch_idx):
 	
 	pos_word_ids = list(filter(lambda wid: len(wid) > 0, pos_word_ids))
 	pos_word_ids = list(map(lambda wid: int(wid), pos_word_ids))
-	pos_word_ids = torch.LongTensor(pos_word_ids)
+	pos_word_ids = torch.LongTensor(pos_word_ids).to(device)
 	
 	_times[2] += time.time() - _t
 	_t = time.time()
@@ -103,7 +102,7 @@ def process_one_line(line, minibatch, minitargets, batch_idx):
 		entity_name_words = word_tokenize(ent_name)
 		entity_name_words = list(filter(lambda w: w in word2id.keys(), entity_name_words))
 		pos_word_ids = list(map(lambda w: word2id[w], entity_name_words))
-		pos_word_ids = torch.LongTensor(pos_word_ids, device=device)
+		pos_word_ids = torch.LongTensor(pos_word_ids).to(device)
 	
 	# get random sample if still empty
 	if len(pos_word_ids) == 0:
@@ -186,3 +185,6 @@ if __name__ == '__main__':
 	
 	_end = time.time()
 	print(f'-- calculated time is {_end - _start} sec')
+
+
+
