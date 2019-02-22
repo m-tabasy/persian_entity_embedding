@@ -1,0 +1,17 @@
+gensim==3.4.0
+hazm==0.7.0
+ipykernel==5.1.0
+ipython==7.2.0
+ipython-genutils==0.2.0
+jupyter-client==5.2.4
+jupyter-core==4.4.0
+jupyterlab==0.35.3
+jupyterlab-server==0.2.0
+nltk==3.3
+notebook==5.7.4
+numpy==1.15.4
+pandas==0.24.1
+scipy==1.2.0
+torch==1.0.1
+torchvision==0.2.1
+urllib3==1.24.1
